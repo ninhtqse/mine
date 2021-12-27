@@ -5,7 +5,7 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
 
 function coreAutoload($class)
 {
-    $root   = '../core/';
+    $root = '../core/';
     $prefix = 'Core\\';
     // remove prefix
 
@@ -47,6 +47,10 @@ $router->post('/api/v1/request/get', function ($request) use($headers) {
     // Converts it into a PHP object
     $request =  json_decode($json,true);
 
+    if(@$request['headers']){
+        $headers = $request['headers'];
+    }
+
     $curl = curl_init($request['url']);
     curl_setopt($curl, CURLOPT_URL, $request['url']);
     curl_setopt($curl, CURLOPT_POST, false);
@@ -71,6 +75,11 @@ $router->post('/api/v1/request', function ($request) use($headers){
     $request =  json_decode($json,true);
 
     $curl = curl_init($request['url']);
+
+    if(@$request['headers']){
+        $headers = $request['headers'];
+    }
+    
     curl_setopt($curl, CURLOPT_URL, $request['url']);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
