@@ -39,6 +39,13 @@ $headers = array(
 );
 
 
+$router->get('/', function ($request) {
+    return json_encode([
+        'title'   => 'php-curl',
+        'version' => '1.0'
+    ]);
+});
+
 // chú ý: trong đối tượng router hoàn toàn không có method get, post, put gì cả
 /// nhưng ở đây mình vẫn gọi 1 method get => trong php nó sẽ chạy vào hàm __call 
 $router->post('/api/v1/request/get', function ($request) use($headers) {
