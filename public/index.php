@@ -40,71 +40,29 @@ $headers = array(
 
 
 $router->get('/', function ($request) {
-    return json_encode([
-        'title'   => 'php-curl',
-        'version' => '1.0'
-    ]);
+    include_once(__DIR__.'/../views/index.php');
 });
 
-// chú ý: trong đối tượng router hoàn toàn không có method get, post, put gì cả
-/// nhưng ở đây mình vẫn gọi 1 method get => trong php nó sẽ chạy vào hàm __call 
-$router->post('/api/v1/request/get', function ($request) use($headers) {
-    //get raw json request
-    $json = file_get_contents('php://input');
-    // Converts it into a PHP object
-    $request =  json_decode($json,true);
-
-    if(@$request['headers']){
-        $headers = $request['headers'];
-    }
-
-    $curl = curl_init($request['url']);
-    curl_setopt($curl, CURLOPT_URL, $request['url']);
-    curl_setopt($curl, CURLOPT_POST, false);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-    $resp = curl_exec($curl);
-
-    curl_close($curl);
-    return $resp;
+$router->get('/hash/base64', function ($request) use($headers) {
+    include_once(__DIR__.'/../views/hash/base64.php');
 });
 
-/// tương tự khi gọi method post mà router không có method post nên sẽ chạy vào hàm __call
-$router->post('/api/v1/request', function ($request) use($headers){
-    //get raw json request
-    $json = file_get_contents('php://input');
-    // Converts it into a PHP object
-    $request =  json_decode($json,true);
-
-    $curl = curl_init($request['url']);
-
-    if(@$request['headers']){
-        $headers = $request['headers'];
-    }
-    
-    curl_setopt($curl, CURLOPT_URL, $request['url']);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-    $data = $request['request'];
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-    $resp = curl_exec($curl);
-
-    curl_close($curl);
-    return $resp;
+$router->get('/hash/md5', function ($request) use($headers){
+    include_once(__DIR__.'/../views/hash/md5.php');
 });
 
-/// kết thúc hoàn toàn quá trình
-/// tại đây hàm __destruct được gọi, vì hàm hủy được chạy khi hệ thống chương trình hủy 1 đối tượng
-/// lúc này là lúc ta thực thi code cần thiết theo từng router
+$router->get('/hash/uuid', function ($request) use($headers){
+    include_once(__DIR__.'/../views/hash/uuid.php');
+});
+
+$router->get('/hash/sha256', function ($request) use($headers){
+    include_once(__DIR__.'/../views/hash/sha256.php');
+});
+
+$router->get('/hash/json', function ($request) use($headers){
+    include_once(__DIR__.'/../views/hash/json.php');
+});
+
+$router->get('/hash/signature', function ($request) use($headers){
+    include_once(__DIR__.'/../views/hash/signature.php');
+});
