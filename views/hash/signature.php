@@ -51,7 +51,7 @@ include_once(__DIR__.'/../layouts/footer.php')
             let path = $('#path').val();
             let key  = $('#key').val();
             let connect = `${body}###${path}`;
-            var hash = CryptoJS.HmacSHA256(connect, key);
+            var hash = CryptoJS.HmacSHA256(btoa(connect), key);
             var hashInHex = CryptoJS.enc.Hex.stringify(hash);
             $('#output').html(hashInHex)
         })
